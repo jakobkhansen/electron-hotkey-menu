@@ -4,7 +4,10 @@
   "description": "Define user hotkeys for actions via a menu in your electron application.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "watch": "tsc -w",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "start": "npm run build && electron ./dist/main.js"
   },
   "repository": {
     "type": "git",
@@ -21,5 +24,11 @@
   "bugs": {
     "url": "https://github.com/jakobkhansen/electron-hotkey-menu/issues"
   },
-  "homepage": "https://github.com/jakobkhansen/electron-hotkey-menu#readme"
+  "homepage": "https://github.com/jakobkhansen/electron-hotkey-menu#readme",
+  "devDependencies": {
+    "typescript": "^3.9.5"
+  },
+  "dependencies": {
+    "electron": "^9.0.5"
+  }
 }
