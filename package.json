@@ -1,0 +1,25 @@
+{
+  "name": "electron-hotkey-menu",
+  "version": "1.0.0",
+  "description": "Define user hotkeys for actions via a menu in your electron application.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jakobkhansen/electron-hotkey-menu.git"
+  },
+  "keywords": [
+    "electron",
+    "hotkey",
+    "accelerator",
+    "menu"
+  ],
+  "author": "Jakob Hansen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jakobkhansen/electron-hotkey-menu/issues"
+  },
+  "homepage": "https://github.com/jakobkhansen/electron-hotkey-menu#readme"
+}
