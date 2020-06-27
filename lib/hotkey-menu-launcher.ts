@@ -10,7 +10,10 @@ export class HotkeyMenu {
 
      registerHotkeysGlobal() {
         this.hotkeys.forEach(key => {
-            globalShortcut.register(key.shortcut, key.onPress)
+            console.log(key.shortcut)
+            if (key.shortcut) {
+                globalShortcut.register(key.shortcut, key.onPress)
+            }
         })
     }
 
@@ -26,8 +29,6 @@ export class HotkeyMenu {
 
         win.loadFile("../lib/menu.html")
         win.webContents.openDevTools()
-
-        console.log(JSON.stringify(this.hotkeys))
 
         ipcMain.on('variable-request', (event,arg) => {
             event.sender.send('variable-reply', JSON.stringify(this.hotkeys));
