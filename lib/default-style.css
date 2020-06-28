@@ -1,15 +1,26 @@
 html {
 }
 
+body {
+}
+
 table {
 }
 
 tr {
+    text-align:center;
+    vertical-align:middle;
 }
 
 input {
     float:right;
-    font-size:5vmin;
+    font-size:1em;
+    width:70%;
+}
+
+td > button {
+    float:right;
+    font-size:1em;
     width:25%;
 }
 
@@ -17,12 +28,15 @@ table {
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
-  font-size:5vmin;
+  font-size:1em;
 }
 
 td, th {
-  border: 1px solid #ddd;
-  padding-bottom:1vw;
+  border-top: 2px, solid #ddd;
+  padding-bottom:0.5vw;
+  padding-top:0.5vw;
+  text-align: center; /* center checkbox horizontally */
+  vertical-align: middle; /* center checkbox vertically */
 }
 
 tr.td {
@@ -39,4 +53,15 @@ th {
   text-align: left;
   background-color: #4CAF50;
   color: white;
+}
+
+#buttons {
+    position:absolute;
+    right: 0;
+    bottom: 0;
+    padding:2vmin;
+}
+
+button {
+    font-size: 1em;
 }

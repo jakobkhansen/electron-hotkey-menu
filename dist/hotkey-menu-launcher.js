@@ -27,6 +27,7 @@ var HotkeyMenu = /** @class */ (function () {
                 nodeIntegration: true
             }
         });
+        win.setMenu(null);
         win.loadFile("../lib/menu.html");
         win.webContents.openDevTools();
         electron_1.ipcMain.on('variable-request', function (event, arg) {

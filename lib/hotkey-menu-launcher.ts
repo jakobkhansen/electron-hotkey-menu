@@ -27,6 +27,7 @@ export class HotkeyMenu {
             }
         })
 
+        win.setMenu(null)
         win.loadFile("../lib/menu.html")
         win.webContents.openDevTools()
 

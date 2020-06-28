@@ -1,30 +1,94 @@
 "use strict";
 exports.__esModule = true;
 var electron_1 = require("electron");
-function gatherHotkeys() {
+var modifiers = [16, 17, 18, 91, 225];
+var specialKeys = {
+    32: "Space"
+};
+function initMenu() {
     console.log("Gathering hotkeys...");
     electron_1.ipcRenderer.send("variable-request", ["hotkeys"]);
     electron_1.ipcRenderer.on("variable-reply", function (event, args) {
-        console.log(args);
+        // Get hotkeys
         var hotkeys = JSON.parse(args);
-        console.log(hotkeys);
+        // Create table
         var body = document.getElementsByTagName('body')[0];
         var table = document.createElement("table");
         var tbody = document.createElement("tbody");
+        // Build hotkey field
         hotkeys.forEach(function (f) {
             var tr = document.createElement("tr");
+            // Build label
             var label = document.createElement("td");
             label.innerHTML = f.label;
             tr.appendChild(label);
+            // Build clear button
+            // Build input
             var inputTd = document.createElement("td");
             var input = document.createElement("input");
+            var button = document.createElement("button");
+            inputTd.width = "40%";
+            button.innerHTML = "Clear";
             inputTd.appendChild(input);
+            inputTd.appendChild(button);
             tr.appendChild(inputTd);
+            // Setup inputfield logic
+            initInputField(f, input, button);
             tbody.appendChild(tr);
         });
+        // Build table
         table.appendChild(tbody);
-        body.appendChild(table);
+        body.prepend(table);
     });
+    initButtons();
+}
+function initInputField(hotkey, input, clear) {
+    input.readOnly = true;
+    var onPressFunc = function (event) {
+        onKeyPress(hotkey, input, event);
+    };
+    input.onfocus = function () {
+        document.addEventListener("keydown", onPressFunc);
+    };
+    input.onblur = function () {
+        document.removeEventListener("keydown", onPressFunc);
+    };
+    clear.onclick = function () {
+        hotkey.shortcut = "";
+        input.value = "";
+    };
+}
+function onKeyPress(hotkey, input, event) {
+    // Ignore only modifier keypresses
+    if (modifiers.includes(event.keyCode)) {
+        return;
+    }
+    console.log(event.keyCode);
+    hotkey.shortcut = "";
+    if (event.metaKey) {
+        hotkey.shortcut += "Meta+";
+    }
+    if (event.ctrlKey) {
+        hotkey.shortcut += "CmdOrCtrl+";
+    }
+    if (event.altKey) {
+        hotkey.shortcut += "Alt+";
+    }
+    if (event.keyCode in specialKeys) {
+        hotkey.shortcut += specialKeys[event.keyCode];
+    }
+    else {
+        hotkey.shortcut += event.key;
+    }
+    console.log(hotkey.shortcut.toString());
+    input.value = hotkey.shortcut.toString();
+}
+function initButtons() {
+    var cancel = document.getElementById("cancel");
+    cancel.onclick = function () {
+        console.log("Clicked cancel");
+        electron_1.remote.getCurrentWindow().close();
+    };
 }
 function loadCSS(filename) {
     var head = document.getElementsByTagName('HEAD')[0];
@@ -37,5 +101,5 @@ function loadCSS(filename) {
     // Append link element to HTML head
     head.appendChild(link);
 }
-gatherHotkeys();
+initMenu();
 //# sourceMappingURL=renderer.js.map
