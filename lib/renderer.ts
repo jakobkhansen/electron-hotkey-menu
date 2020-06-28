@@ -1,4 +1,5 @@
-import {ipcRenderer, remote} from "electron"
+import {ipcRenderer, ipcMain, remote} from "electron"
+import * as fs from "fs"
 import {Hotkey} from "./hotkey-menu-launcher"
 
 const modifiers = [16, 17, 18, 91, 225]
@@ -7,60 +8,60 @@ const specialKeys : Record<number, string> = {
 }
 
 function initMenu() {
-    console.log("Gathering hotkeys...")
-    ipcRenderer.send("variable-request", ["hotkeys"])
+
+    // Get hotkeys
+    const hotkeys : Hotkey[] = JSON.parse(fs.readFileSync("hotkeys.json").toString())
 
 
-    ipcRenderer.on("variable-reply", (event, args) => {
+    // Create table
+    const body = document.getElementsByTagName('body')[0];
+    const table = document.createElement("table")
+    const tbody = document.createElement("tbody")
 
-        // Get hotkeys
-        const hotkeys : Hotkey[] = JSON.parse(args)
+    // Build hotkey field
+    hotkeys.forEach(f => {
 
-        // Create table
-        const body = document.getElementsByTagName('body')[0];
-        const table = document.createElement("table")
-        const tbody = document.createElement("tbody")
+        const tr = document.createElement("tr")
 
-        // Build hotkey field
-        hotkeys.forEach(f => {
+        // Build label
+        const label = document.createElement("td")
+        label.innerHTML = f.label
+        tr.appendChild(label)
 
-            const tr = document.createElement("tr")
+        // Build clear button
 
-            // Build label
-            const label = document.createElement("td")
-            label.innerHTML = f.label
-            tr.appendChild(label)
+        // Build input
+        const inputTd = document.createElement("td")
+        const input = document.createElement("input")
 
-            // Build clear button
+        const buttonTd = document.createElement("td")
+        const button = document.createElement("button")
 
-            // Build input
-            const inputTd = document.createElement("td")
-            const input = document.createElement("input")
-            const button = document.createElement("button")
-            inputTd.width = "40%"
-            button.innerHTML = "Clear"
-            inputTd.appendChild(input)
-            inputTd.appendChild(button)
-            tr.appendChild(inputTd)
+        inputTd.width = "40%"
+        button.innerHTML = "Clear"
+        inputTd.appendChild(input)
+        buttonTd.appendChild(button)
+        tr.appendChild(buttonTd)
+        tr.appendChild(inputTd)
 
-            // Setup inputfield logic
-            initInputField(f, input, button)
+        // Setup inputfield logic
+        initInputField(f, input, button)
 
-            tbody.appendChild(tr)
-        })
-
-
-        // Build table
-        table.appendChild(tbody)
-        body.prepend(table)
+        tbody.appendChild(tr)
     })
 
-    initButtons()
+
+    // Build table
+    table.appendChild(tbody)
+    body.prepend(table)
+    initButtons(hotkeys)
+
 }
 
 
 function initInputField(hotkey : Hotkey, input : HTMLInputElement, clear : HTMLButtonElement) {
     input.readOnly = true
+    input.value = hotkey.shortcut.toString()
 
     const onPressFunc = (event : KeyboardEvent) => {
         onKeyPress(hotkey, input, event)
@@ -92,7 +93,7 @@ function onKeyPress(hotkey : Hotkey, input : HTMLInputElement, event : KeyboardE
     hotkey.shortcut = ""
 
     if (event.metaKey) {
-        hotkey.shortcut += "Meta+"
+        hotkey.shortcut += "Super+"
     }
 
     if (event.ctrlKey) {
@@ -101,6 +102,10 @@ function onKeyPress(hotkey : Hotkey, input : HTMLInputElement, event : KeyboardE
 
     if (event.altKey) {
         hotkey.shortcut += "Alt+"
+    }
+
+    if (event.shiftKey) {
+        hotkey.shortcut += "Shift+"
     }
 
     if (event.keyCode in specialKeys) {
@@ -113,10 +118,17 @@ function onKeyPress(hotkey : Hotkey, input : HTMLInputElement, event : KeyboardE
     input.value = hotkey.shortcut.toString()
 }
 
-function initButtons() {
+function initButtons(hotkeys : Hotkey[]) {
     const cancel = document.getElementById("cancel")
+    const confirm = document.getElementById("confirm")
+
     cancel.onclick = () => {
         console.log("Clicked cancel")
+        remote.getCurrentWindow().close()
+    }
+
+    confirm.onclick = () => {
+        fs.writeFileSync("hotkeys.json", JSON.stringify(hotkeys))
         remote.getCurrentWindow().close()
     }
 }

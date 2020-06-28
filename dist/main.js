@@ -1,16 +1,25 @@
 "use strict";
 exports.__esModule = true;
 var electron_1 = require("electron");
-var hotkey_menu_launcher_1 = require("./hotkey-menu-launcher");
 electron_1.app.on("ready", function () {
-    var hotkeys = new hotkey_menu_launcher_1.HotkeyMenu();
-    hotkeys.addHotkey(new hotkey_menu_launcher_1.Hotkey(function () {
-        console.log("Hotkey 2 pressed");
-    }, "Test hotkey", "CommandOrControl+S"));
-    hotkeys.addHotkey(new hotkey_menu_launcher_1.Hotkey(function () {
-        console.log("Hotkey 2 pressed");
-    }, "Hotkey 2"));
-    hotkeys.registerHotkeysGlobal();
-    hotkeys.displayMenu();
+    var win = new electron_1.BrowserWindow({
+        width: 200,
+        height: 300,
+        autoHideMenuBar: true,
+        webPreferences: {
+            nodeIntegration: true,
+            enableRemoteModule: true
+        }
+    });
+    win.loadFile("../lib/test.html");
+    win.webContents.openDevTools();
+    //const hotkeys = new HotkeyMenu()
+    //hotkeys.addHotkey(new Hotkey(() => {
+    //console.log("Hotkey 2 pressed")
+    //}, "Test hotkey", "CommandOrControl+S"))
+    //hotkeys.addHotkey(new Hotkey(() => {
+    //console.log("Hotkey 2 pressed")
+    //}, "Hotkey 2"))
+    //hotkeys.displayMenu()
 });
 //# sourceMappingURL=main.js.map

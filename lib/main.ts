@@ -2,17 +2,29 @@ import {app, BrowserWindow, remote} from "electron"
 import {HotkeyMenu, Hotkey} from "./hotkey-menu-launcher"
 
 app.on("ready", () => {
-    const hotkeys = new HotkeyMenu()
+    const win = new BrowserWindow({
+        width: 200,
+        height: 300,
+        autoHideMenuBar:true,
+        webPreferences: {
+            nodeIntegration:true,
+            enableRemoteModule:true
+        }
+    })
 
-    hotkeys.addHotkey(new Hotkey(() => {
-        console.log("Hotkey 2 pressed")
-    }, "Test hotkey", "CommandOrControl+S"))
+    win.loadFile("../lib/test.html")
+    win.webContents.openDevTools()
 
-    hotkeys.addHotkey(new Hotkey(() => {
-        console.log("Hotkey 2 pressed")
-    }, "Hotkey 2"))
 
-    hotkeys.registerHotkeysGlobal()
+    //const hotkeys = new HotkeyMenu()
 
-    hotkeys.displayMenu()
+    //hotkeys.addHotkey(new Hotkey(() => {
+        //console.log("Hotkey 2 pressed")
+    //}, "Test hotkey", "CommandOrControl+S"))
+
+    //hotkeys.addHotkey(new Hotkey(() => {
+        //console.log("Hotkey 2 pressed")
+    //}, "Hotkey 2"))
+
+    //hotkeys.displayMenu()
 })
