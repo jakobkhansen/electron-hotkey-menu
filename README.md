@@ -18,7 +18,7 @@
 
 ## Install
 
-```
+```sh
 npm install electron-hotkey-menu
 ```
 
