@@ -9,7 +9,12 @@
     "watch": "tsc -w",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "start": "npm run build && electron ./lib/main.js",
-    "format": "prettier --write \"src/**/*.ts\" \"lib/**/*.js\""
+    "format": "prettier --write \"src/**/*.ts\" \"lib/**/*.js\"",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run lint",
+    "preversion": "npm run lint",
+    "version" : "npm run format && git add -A src",
+    "postversion" : "git push && git push --tags"
   },
   "repository": {
     "type": "git",
