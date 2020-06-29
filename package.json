@@ -3,7 +3,7 @@
   "version": "1.0.2",
   "description": "Define user hotkeys for actions via a menu in your electron application.",
   "main": "lib/hotkey-menu-launcher",
-  "typings": "src/hotkey-menu-launcher",
+  "typings": "lib/hotkey-menu-launcher",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
