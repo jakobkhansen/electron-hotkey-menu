@@ -1,7 +1,7 @@
-import { remote, app } from 'electron'
-import * as fs from 'fs'
-import * as path from "path"
-import * as pkgDir from "pkg-dir"
+import { remote, app } from 'electron';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as pkgDir from 'pkg-dir';
 
 interface MenuOptions {
   width?: number;
@@ -26,9 +26,9 @@ export class HotkeyMenu {
     }
 
     if (options.hotkeys) {
-        options.hotkeys.forEach(f => {
-            this.addHotkey(f)
-        })
+      options.hotkeys.forEach((f) => {
+        this.addHotkey(f);
+      });
     }
 
     this.options = options;
@@ -104,7 +104,7 @@ export class HotkeyMenu {
     });
 
     win.setMenu(null);
-    win.loadFile(path.join(pkgDir.sync(), "node_modules/electron-hotkey-menu/src/menu.html"))
+    win.loadFile(path.join(pkgDir.sync(), 'node_modules/electron-hotkey-menu/src/menu.html'));
 
     win.on('close', (event) => {
       this.unregisterHotkeysGlobal();

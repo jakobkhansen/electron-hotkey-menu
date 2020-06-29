@@ -45,7 +45,7 @@ function initMenu() {
     initInputField(f, input, button);
 
     tbody.appendChild(tr);
- });
+  });
 
   // Build table
   table.appendChild(tbody);
