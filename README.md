@@ -18,16 +18,61 @@
 
 ## Install
 
-```sh
+```
 Currently not on npm, clone and npm link to use. Will get packaged to npm in the future.
 ```
 
 ## Usage
 
-```sh
-npm run start
-```
+```typescript
+import {HotkeyMenu, Hotkey} from "electron-hotkey-menu"
 
+
+const hotkeys : HotkeyMenu = new HotkeyMenu({
+
+    // Width and height of menu
+    width:400,
+    height:400,
+    
+    // Add hotkeys directly
+    hotkeys:
+        [
+            {
+                // Label in menu
+                label:"Hotkey 1",
+
+                // Default shortcut, uses Electron.Accelerator notation
+                shortcut:"Alt+o",
+
+                // Function to execute on hotkey press
+                onPress:() => {
+                    console.log("Hotkey activated!")
+                }
+            },
+            {
+                label:"Hotkey 2",
+
+                // No default shortcut
+                shortcut:"",
+
+                // Execute remote function by reference
+                onPress:functionName
+            }
+        ]
+    })
+
+// Add hotkeys later
+hotkeys.addHotkey(new Hotkey("Hotkey 3", "Shift+c", () => {
+    console.log("Later added hotkey activated")
+}))
+
+// Register hotkeys before showing menu
+hotkeys.registerHotkeysGlobal()
+
+// Load menu on a button press
+document.getElementById("hotkeys").onclick = () => hotkeys.displayMenu()
+```
+![alt text](https://github.com/jakobkhansen/electron-hotkey-menu/blob/master/images/menu.png?raw=true)
 ## Author
 
 👤 **Jakob Hansen**
