@@ -25,6 +25,12 @@ export class HotkeyMenu {
       options.height = DEFAULT_HEIGHT;
     }
 
+    if (options.hotkeys) {
+        options.hotkeys.forEach(f => {
+            this.addHotkey(f)
+        })
+    }
+
     this.options = options;
 
     try {
