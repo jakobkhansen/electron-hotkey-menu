@@ -104,7 +104,7 @@ export class HotkeyMenu {
     });
 
     win.setMenu(null);
-    win.loadFile(path.join(pkgDir.sync(), 'node_modules/electron-hotkey-menu/lib/menu.html'));
+    win.loadFile(path.join(pkgDir.sync(), 'node_modules/electron-hotkey-menu/resources/menu.html'));
 
     win.on('close', (event) => {
       this.unregisterHotkeysGlobal();

@@ -43,6 +43,7 @@
     "pkg-dir": "^4.2.0"
   },
   "files": [
-    "lib/**/*"
+    "lib/**/*",
+    "resources/**/*"
   ]
 }
