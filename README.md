@@ -19,7 +19,7 @@
 ## Install
 
 ```
-Currently not on npm, clone and npm link to use. Will get packaged to npm in the future.
+npm install electron-hotkey-menu
 ```
 
 ## Usage
