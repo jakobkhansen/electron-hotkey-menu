@@ -73,6 +73,9 @@ hotkeys.registerHotkeysGlobal()
 document.getElementById("hotkeys").onclick = () => hotkeys.displayMenu()
 ```
 ![alt text](https://github.com/jakobkhansen/electron-hotkey-menu/blob/master/images/menu.png?raw=true)
+
+Hotkeys are saved between program launches and stored in `hotkeys.json` where the application was launched.
+
 ## Author
 
 👤 **Jakob Hansen**
