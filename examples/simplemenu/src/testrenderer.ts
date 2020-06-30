@@ -1,4 +1,3 @@
-import {remote, ipcMain} from "electron"
 import {HotkeyMenu, Hotkey} from "electron-hotkey-menu"
 
 let hotkeys : HotkeyMenu
