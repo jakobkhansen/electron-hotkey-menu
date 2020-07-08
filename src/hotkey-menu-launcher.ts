@@ -1,4 +1,4 @@
-import { remote, app } from 'electron';
+import { remote, app, BrowserWindow } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as pkgDir from 'pkg-dir';
@@ -7,6 +7,8 @@ interface MenuOptions {
   width?: number;
   height?: number;
   hotkeys?: Hotkey[];
+  css?: string;
+  savefile? : string;
 }
 
 const DEFAULT_WIDTH = 300;
@@ -14,8 +16,14 @@ const DEFAULT_HEIGHT = 300;
 
 export class HotkeyMenu {
   hotkeys: Hotkey[] = [];
-  options: MenuOptions;
+  private options: MenuOptions;
 
+
+  /*
+   * width/height: Dimensions of HotkeyMenu
+   * hotkeys: Array of Hotkey objects
+   * css: Custom css to overload the default css
+  */
   constructor(options: MenuOptions) {
     if (!options.width) {
       options.width = DEFAULT_WIDTH;
@@ -31,12 +39,16 @@ export class HotkeyMenu {
       });
     }
 
+    if (!options.savefile) {
+        options.savefile = "hotkeys.json"
+    }
+
     this.options = options;
 
     try {
-      fs.readFileSync('hotkeys.json');
+      fs.readFileSync(this.options.savefile);
     } catch {
-      fs.createWriteStream('hotkeys.json');
+      fs.createWriteStream(this.options.savefile);
     }
   }
 
@@ -54,7 +66,7 @@ export class HotkeyMenu {
     this.writeToFile();
   }
 
-  reloadHotkeys() {
+  reloadHotkeysFromFile() {
     const hotkeysFile: Hotkey[] = this.readHotkeysFile();
     this.hotkeys.forEach((currentHotkey) => {
       hotkeysFile.forEach((newHotkey) => {
@@ -65,10 +77,10 @@ export class HotkeyMenu {
     });
   }
 
-  readHotkeysFile(): Hotkey[] {
+  private readHotkeysFile(): Hotkey[] {
     let hotkeysFile: Hotkey[] = [];
     try {
-      hotkeysFile = JSON.parse(fs.readFileSync('hotkeys.json').toString());
+      hotkeysFile = JSON.parse(fs.readFileSync(this.options.savefile).toString());
     } catch (e) {
       hotkeysFile = JSON.parse('[]');
     }
@@ -79,16 +91,14 @@ export class HotkeyMenu {
   registerHotkeysGlobal() {
     this.hotkeys.forEach((key) => {
       if (key.shortcut) {
-        remote.globalShortcut.register(key.shortcut, key.onPress);
+          key.registerHotkeyGlobal()
       }
     });
   }
 
   unregisterHotkeysGlobal() {
     this.hotkeys.forEach((key) => {
-      if (key.shortcut) {
-        remote.globalShortcut.unregister(key.shortcut);
-      }
+        key.unregisterHotkeyGlobal()
     });
   }
 
@@ -103,24 +113,39 @@ export class HotkeyMenu {
       },
     });
 
+    win.webContents.openDevTools()
+
+    this.loadMenuLogic(win)
+  }
+
+  private loadMenuLogic(win : BrowserWindow) {
     win.setMenu(null);
     win.loadFile(path.join(pkgDir.sync(), 'node_modules/electron-hotkey-menu/resources/menu.html'));
 
-    win.on('close', (event) => {
+    win.on('close', (e : Event) => {
       this.unregisterHotkeysGlobal();
 
-      this.reloadHotkeys();
+      this.reloadHotkeysFromFile();
 
       this.registerHotkeysGlobal();
     });
+
+    this.sendCSSToMenu()
   }
 
-  writeToFile() {
+  private sendCSSToMenu() {
+      remote.ipcMain.on('css-request', (event,arg) => {
+          event.sender.send('css-reply', this.options.css);
+      })
+  }
+
+  private writeToFile() {
     const data = JSON.stringify(this.hotkeys);
-    fs.writeFileSync('hotkeys.json', data);
+    fs.writeFileSync(this.options.savefile, data);
   }
 }
 
+// Holds a single hotkey
 export class Hotkey {
   label: string;
   shortcut: Electron.Accelerator;
@@ -130,5 +155,17 @@ export class Hotkey {
     this.onPress = onPress;
     this.label = label;
     this.shortcut = key;
+  }
+
+  registerHotkeyGlobal() {
+      if (this.shortcut) {
+          remote.globalShortcut.register(this.shortcut, this.onPress)
+      }
+  }
+
+  unregisterHotkeyGlobal() {
+      if (this.shortcut) {
+          remote.globalShortcut.unregister(this.shortcut)
+      }
   }
 }

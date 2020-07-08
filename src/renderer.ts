@@ -1,6 +1,8 @@
-import { ipcRenderer, ipcMain, remote } from 'electron';
-import * as fs from 'fs';
-import { Hotkey } from './hotkey-menu-launcher';
+import { ipcRenderer, ipcMain, remote } from 'electron'
+import * as fs from 'fs'
+import * as path from "path"
+import { Hotkey } from './hotkey-menu-launcher'
+import * as pkgDir from 'pkg-dir'
 
 const modifiers = [16, 17, 18, 91, 225];
 const specialKeys: Record<number, string> = {
@@ -51,6 +53,8 @@ function initMenu() {
   table.appendChild(tbody);
   body.prepend(table);
   initButtons(hotkeys);
+
+  loadCustomCSS()
 }
 
 function initInputField(hotkey: Hotkey, input: HTMLInputElement, clear: HTMLButtonElement) {
@@ -122,17 +126,39 @@ function initButtons(hotkeys: Hotkey[]) {
   };
 }
 
-function loadCSS(filename: string) {
-  const head = document.getElementsByTagName('HEAD')[0];
-  // Create new link Element
-  const link = document.createElement('link');
-
-  // set the attributes for link element
-  link.rel = 'filename';
-  link.type = 'text/css';
-  link.href = 'style.css';
-  // Append link element to HTML head
-  head.appendChild(link);
+function loadCustomCSS() {
+    const cssFilename = gatherCSSPathFromMain()
+    cssFilename.then(result => {
+        loadCSSIntoWindow(result)
+    })
 }
+
+function gatherCSSPathFromMain() : Promise<string> {
+    return new Promise(resolve => {
+        ipcRenderer.send("css-request", ["hotkeys"])
+
+        ipcRenderer.on("css-reply", (event, args) => {
+            resolve(args)
+        })
+    })
+}
+
+function loadCSSIntoWindow(relativePath : string) {
+
+    const absolutePath = path.join(pkgDir.sync(), relativePath)
+
+
+    const head = document.getElementsByTagName('HEAD')[0];
+    // Create new link Element
+    const link = document.createElement('link');
+
+    // set the attributes for link element
+    link.rel = "stylesheet"
+    link.type = 'text/css'
+    link.href = absolutePath
+    // Append link element to HTML head
+    head.appendChild(link)
+}
+
 
 initMenu();

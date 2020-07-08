@@ -29,39 +29,29 @@ import {HotkeyMenu, Hotkey} from "electron-hotkey-menu"
 
 
 const hotkeys : HotkeyMenu = new HotkeyMenu({
-
     // Width and height of menu
     width:400,
     height:400,
-    
+
+    // Custom CSS
+    css:'./custom-menu.css',
+
+    // Custom savefile. Use this if you want separate hotkey menus. Defaults to hotkeys.json
+    savefile:"custom-hotkey-file.json",
+
     // Add hotkeys directly
     hotkeys:
         [
-            {
-                // Label in menu
-                label:"Hotkey 1",
-
-                // Default shortcut, uses Electron.Accelerator notation
-                shortcut:"Alt+o",
-
-                // Function to execute on hotkey press
-                onPress:() => {
-                    console.log("Hotkey activated!")
-                }
-            },
-            {
-                label:"Hotkey 2",
-
-                // No default shortcut
-                shortcut:"",
-
-                // Execute remote function by reference
-                onPress:functionName
-            }
+            // Label, default shortcut, function to execute
+            new Hotkey("Hotkey 1", "Alt+O", () => {
+                console.log("Hotkey activated")
+            }),
+            new Hotkey("Hotkey 2", "", functionName)
         ]
-    })
+})
 
-// Add hotkeys later
+
+// Hotkey added later
 hotkeys.addHotkey(new Hotkey("Hotkey 3", "Shift+c", () => {
     console.log("Later added hotkey activated")
 }))
