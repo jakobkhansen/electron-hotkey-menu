@@ -8,7 +8,7 @@ interface MenuOptions {
   height?: number;
   hotkeys?: Hotkey[];
   css?: string;
-  savefile? : string;
+  savefile?: string;
 }
 
 const DEFAULT_WIDTH = 300;
@@ -18,12 +18,11 @@ export class HotkeyMenu {
   hotkeys: Hotkey[] = [];
   private options: MenuOptions;
 
-
   /*
    * width/height: Dimensions of HotkeyMenu
    * hotkeys: Array of Hotkey objects
    * css: Custom css to overload the default css
-  */
+   */
   constructor(options: MenuOptions) {
     if (!options.width) {
       options.width = DEFAULT_WIDTH;
@@ -40,7 +39,7 @@ export class HotkeyMenu {
     }
 
     if (!options.savefile) {
-        options.savefile = "hotkeys.json"
+      options.savefile = 'hotkeys.json';
     }
 
     this.options = options;
@@ -91,14 +90,14 @@ export class HotkeyMenu {
   registerHotkeysGlobal() {
     this.hotkeys.forEach((key) => {
       if (key.shortcut) {
-          key.registerHotkeyGlobal()
+        key.registerHotkeyGlobal();
       }
     });
   }
 
   unregisterHotkeysGlobal() {
     this.hotkeys.forEach((key) => {
-        key.unregisterHotkeyGlobal()
+      key.unregisterHotkeyGlobal();
     });
   }
 
@@ -113,16 +112,16 @@ export class HotkeyMenu {
       },
     });
 
-    win.webContents.openDevTools()
+    win.webContents.openDevTools();
 
-    this.loadMenuLogic(win)
+    this.loadMenuLogic(win);
   }
 
-  private loadMenuLogic(win : BrowserWindow) {
+  private loadMenuLogic(win: BrowserWindow) {
     win.setMenu(null);
     win.loadFile(path.join(pkgDir.sync(), 'node_modules/electron-hotkey-menu/resources/menu.html'));
 
-    win.on('close', (e : Event) => {
+    win.on('close', (e: Event) => {
       this.unregisterHotkeysGlobal();
 
       this.reloadHotkeysFromFile();
@@ -130,13 +129,13 @@ export class HotkeyMenu {
       this.registerHotkeysGlobal();
     });
 
-    this.sendCSSToMenu()
+    this.sendCSSToMenu();
   }
 
   private sendCSSToMenu() {
-      remote.ipcMain.on('css-request', (event,arg) => {
-          event.sender.send('css-reply', this.options.css);
-      })
+    remote.ipcMain.on('css-request', (event, arg) => {
+      event.sender.send('css-reply', this.options.css);
+    });
   }
 
   private writeToFile() {
@@ -158,14 +157,14 @@ export class Hotkey {
   }
 
   registerHotkeyGlobal() {
-      if (this.shortcut) {
-          remote.globalShortcut.register(this.shortcut, this.onPress)
-      }
+    if (this.shortcut) {
+      remote.globalShortcut.register(this.shortcut, this.onPress);
+    }
   }
 
   unregisterHotkeyGlobal() {
-      if (this.shortcut) {
-          remote.globalShortcut.unregister(this.shortcut)
-      }
+    if (this.shortcut) {
+      remote.globalShortcut.unregister(this.shortcut);
+    }
   }
 }
