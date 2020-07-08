@@ -130,10 +130,10 @@ function loadCustomCSSIfExists() {
   const cssFilename = gatherCSSPathFromMain();
 
   cssFilename.then((result) => {
-      // If css path is not undefined, load it
-      if (result) {
-          loadCSSIntoWindow(result);
-      }
+    // If css path is not undefined, load it
+    if (result) {
+      loadCSSIntoWindow(result);
+    }
   });
 }
 

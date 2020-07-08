@@ -11,9 +11,9 @@ interface MenuOptions {
   savefile?: string;
 }
 
-const DEFAULT_WIDTH = 300
-const DEFAULT_HEIGHT = 300
-const DEFAULT_SAVEFILE = "hotkey.json"
+const DEFAULT_WIDTH = 300;
+const DEFAULT_HEIGHT = 300;
+const DEFAULT_SAVEFILE = 'hotkey.json';
 
 export class HotkeyMenu {
   hotkeys: Hotkey[] = [];
@@ -25,9 +25,9 @@ export class HotkeyMenu {
    * css: Custom css to overload the default css
    */
   constructor(options: MenuOptions) {
-      this.options.width = options.width ? options.width : DEFAULT_WIDTH
-      this.options.height = options.height ? options.height : DEFAULT_HEIGHT
-      this.options.savefile = options.savefile ? options.savefile : DEFAULT_SAVEFILE
+    this.options.width = options.width ? options.width : DEFAULT_WIDTH;
+    this.options.height = options.height ? options.height : DEFAULT_HEIGHT;
+    this.options.savefile = options.savefile ? options.savefile : DEFAULT_SAVEFILE;
 
     if (options.hotkeys) {
       options.hotkeys.forEach((f) => {
