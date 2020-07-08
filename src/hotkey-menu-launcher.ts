@@ -11,12 +11,13 @@ interface MenuOptions {
   savefile?: string;
 }
 
-const DEFAULT_WIDTH = 300;
-const DEFAULT_HEIGHT = 300;
+const DEFAULT_WIDTH = 300
+const DEFAULT_HEIGHT = 300
+const DEFAULT_SAVEFILE = "hotkey.json"
 
 export class HotkeyMenu {
   hotkeys: Hotkey[] = [];
-  private options: MenuOptions;
+  private options: MenuOptions = {};
 
   /*
    * width/height: Dimensions of HotkeyMenu
@@ -24,22 +25,14 @@ export class HotkeyMenu {
    * css: Custom css to overload the default css
    */
   constructor(options: MenuOptions) {
-    if (!options.width) {
-      options.width = DEFAULT_WIDTH;
-    }
-
-    if (!options.height) {
-      options.height = DEFAULT_HEIGHT;
-    }
+      this.options.width = options.width ? options.width : DEFAULT_WIDTH
+      this.options.height = options.height ? options.height : DEFAULT_HEIGHT
+      this.options.savefile = options.savefile ? options.savefile : DEFAULT_SAVEFILE
 
     if (options.hotkeys) {
       options.hotkeys.forEach((f) => {
         this.addHotkey(f);
       });
-    }
-
-    if (!options.savefile) {
-      options.savefile = 'hotkeys.json';
     }
 
     this.options = options;
@@ -111,8 +104,6 @@ export class HotkeyMenu {
         nodeIntegration: true,
       },
     });
-
-    win.webContents.openDevTools();
 
     this.loadMenuLogic(win);
   }

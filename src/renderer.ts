@@ -54,7 +54,7 @@ function initMenu() {
   body.prepend(table);
   initButtons(hotkeys);
 
-  loadCustomCSS();
+  loadCustomCSSIfExists();
 }
 
 function initInputField(hotkey: Hotkey, input: HTMLInputElement, clear: HTMLButtonElement) {
@@ -126,13 +126,18 @@ function initButtons(hotkeys: Hotkey[]) {
   };
 }
 
-function loadCustomCSS() {
+function loadCustomCSSIfExists() {
   const cssFilename = gatherCSSPathFromMain();
+
   cssFilename.then((result) => {
-    loadCSSIntoWindow(result);
+      // If css path is not undefined, load it
+      if (result) {
+          loadCSSIntoWindow(result);
+      }
   });
 }
 
+// Get CSS from Main via ipc
 function gatherCSSPathFromMain(): Promise<string> {
   return new Promise((resolve) => {
     ipcRenderer.send('css-request', ['hotkeys']);
@@ -143,6 +148,7 @@ function gatherCSSPathFromMain(): Promise<string> {
   });
 }
 
+// Load CSS into the menu. Filepath is relative to node project.
 function loadCSSIntoWindow(relativePath: string) {
   const absolutePath = path.join(pkgDir.sync(), relativePath);
 
