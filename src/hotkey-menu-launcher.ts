@@ -46,7 +46,6 @@ export class HotkeyMenu {
 
 	addHotkey(hotkey: Hotkey) {
 		const hotkeysFile = this.readHotkeysFile()
-        console.log("Add: " + hotkeysFile.toString());
 
 		hotkeysFile.forEach((f) => {
 			if (f.label === hotkey.label) {
@@ -72,7 +71,6 @@ export class HotkeyMenu {
 		let hotkeysFile: Hotkey[] = []
 		try {
             const hotkeyFileData = fs.readFileSync(this.options.savefile)
-            console.log(hotkeyFileData.toString())
 			hotkeysFile = JSON.parse(fs.readFileSync(this.options.savefile).toString())
 		} catch (e) {
 			hotkeysFile = JSON.parse("[]")
@@ -145,8 +143,7 @@ export class HotkeyMenu {
 
 	private writeToFile() {
 		const data = JSON.stringify(this.hotkeys)
-        console.log("Data: " + data);
-        
+
 		fs.writeFileSync(this.options.savefile, data)
 	}
 }
