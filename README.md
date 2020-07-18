@@ -1,6 +1,6 @@
-<h1 align="center">Welcome to electron-hotkey-menu 👋</h1>
+<h1 align="center">electron-hotkey-menu</h1>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-1.1.2-blue.svg?cacheSeconds=2592000" />
   <a href="https://github.com/jakobkhansen/electron-hotkey-menu#readme" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
   </a>
@@ -12,7 +12,7 @@
   </a>
 </p>
 
-> Does your Electron app use hotkeys? Do you want your users to configure these hotkeys themselves? This package will create a customisable key-binding menu for you, with simple, non-boilerplate code.
+> Does your Electron app use hotkeys? Do you want your users to configure these hotkeys themselves? This package will create a customizable key-binding menu for you, with simple, non-boilerplate code.
 
 ### 🏠 [Homepage](https://github.com/jakobkhansen/electron-hotkey-menu#readme)
 
@@ -64,7 +64,7 @@ document.getElementById("hotkeys").onclick = () => hotkeys.displayMenu()
 ```
 ![alt text](https://github.com/jakobkhansen/electron-hotkey-menu/blob/master/images/menu.png?raw=true)
 
-Hotkeys are saved between program launches and stored in `hotkeys.json` where the application was launched.
+Hotkeys are saved between program launches and stored by default in `hotkeys.json` where the application was launched. (customizable)
 
 ## Author
 
@@ -75,8 +75,7 @@ Hotkeys are saved between program launches and stored in `hotkeys.json` where th
 
 ## 🤝 Contributing
 
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/jakobkhansen/electron-hotkey-menu/issues). You can also take a look at the [contributing guide](https://github.com/jakobkhansen/electron-hotkey-menu/blob/master/CONTRIBUTING.md).
-
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/jakobkhansen/electron-hotkey-menu/issues).
 ## Show your support
 
 Give a ⭐️ if this project helped you!
