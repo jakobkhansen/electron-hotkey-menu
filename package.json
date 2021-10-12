@@ -39,7 +39,7 @@
     "typescript": "^3.9.6"
   },
   "dependencies": {
-    "electron": "^9.1.0",
+    "electron": "^11.5.0",
     "pkg-dir": "^4.2.0"
   },
   "files": [
